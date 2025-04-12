@@ -41,6 +41,8 @@ object RepositoryModule {
         return UserDataServiceImpl(api)
     }
 
+    // tässä tehdään konkreettinen luokan instanssi dependencysta MeasurementDataService
+    // kun sitä käytetään MeasurementViewModelissa
     @Provides
     fun provideMeasurementDataService(api: DataApi) : MeasurementDataService {
         return MeasurementDataServiceImpl(api)
@@ -49,6 +51,9 @@ object RepositoryModule {
 
 @Module
 @InstallIn(ViewModelComponent::class)
+// tätä käytetään viewmodelissa
+// dependencyna tarkistamaan, onko internet-yhteyttä
+
 object NetworkModule {
     @Provides
     fun provideNetworkChecker(@ApplicationContext context: Context): NetworkChecker {
