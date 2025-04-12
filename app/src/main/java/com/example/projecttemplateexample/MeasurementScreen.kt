@@ -97,14 +97,17 @@ fun MeasurementScreen(
                 if (measurementState.showDatePicker) {
 
                     val datePickerState = rememberDatePickerState(
-                        initialSelectedDateMillis = null
+                        initialSelectedDateMillis = null,
+
                     )
                     DatePickerDialog(
                         onDismissRequest = {
                             onDateBtnClick()
                         },
                         confirmButton = {
-                            TextButton(onClick = {
+                            TextButton(
+                                enabled = datePickerState.selectedDateMillis != null,
+                                onClick = {
 
                                 datePickerState.selectedDateMillis?.let { millis ->
                                     val newDate =
