@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -43,6 +44,7 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun MeasurementScreenRoot(modifier: Modifier = Modifier, vm: MeasurementViewModel) {
+
     val measurementState by vm.measurementState.collectAsStateWithLifecycle()
     val labelState by vm.labelState.collectAsStateWithLifecycle()
     val dateFormatter = DateTimeFormatter.ofPattern("dd MMM yyyy")
@@ -68,7 +70,10 @@ fun MeasurementScreenRoot(modifier: Modifier = Modifier, vm: MeasurementViewMode
             vm.setDate(newDate)
         }, modelProducer = modelProducer,
 
-        labelState = labelState
+        labelState = labelState,
+        onRetry = {
+            vm.getMeasurements()
+        }
     )
 
 }
@@ -82,7 +87,8 @@ fun MeasurementScreen(
     dtFormatter: DateTimeFormatter,
     onDateBtnClick: () -> Unit,
     onConfirm: (LocalDate) -> Unit,
-    modelProducer: CartesianChartModelProducer
+    modelProducer: CartesianChartModelProducer,
+    onRetry: () -> Unit
 ) {
     Scaffold(topBar = {
         TopAppBar(title = {
@@ -121,11 +127,19 @@ fun MeasurementScreen(
                             .padding(paddingValues),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(err)
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(err)
+                            Button(onClick = {
+                                onRetry()
+                            }) {
+                                Text("Retry")
+                            }
+                        }
+
                     }
                 } ?: LineChart(
-                    measurementState = measurementState, labelState = labelState,
-
+                    measurementState = measurementState,
+                    labelState = labelState,
                     modelProducer = modelProducer
                 )
 

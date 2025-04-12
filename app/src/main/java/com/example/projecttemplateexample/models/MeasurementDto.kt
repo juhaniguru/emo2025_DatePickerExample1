@@ -1,5 +1,6 @@
 package com.example.projecttemplateexample.models
 
+import com.google.gson.annotations.SerializedName
 import java.time.LocalDate
 
 data class MeasurementState(
@@ -11,4 +12,9 @@ data class MeasurementState(
 
 )
 
+
+data class MeasurementDto(
+    @SerializedName("date_str")
+    val dateStr: String,
+    val value: Float)
 

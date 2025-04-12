@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.provider.ContactsContract.Data
 import androidx.annotation.RequiresPermission
 import dagger.Module
 import dagger.Provides
@@ -23,7 +24,7 @@ object AppModule {
     @Singleton
 
     fun provideDataApi(): DataApi {
-        return Retrofit.Builder().baseUrl("https://jsonplaceholder.typicode.com/")
+        return Retrofit.Builder().baseUrl("http://10.0.2.2:8000/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(DataApi::class.java)
@@ -38,6 +39,11 @@ object RepositoryModule {
     @Provides
     fun provideUserDataService(api: DataApi): UserDataService {
         return UserDataServiceImpl(api)
+    }
+
+    @Provides
+    fun provideMeasurementDataService(api: DataApi) : MeasurementDataService {
+        return MeasurementDataServiceImpl(api)
     }
 }
 
